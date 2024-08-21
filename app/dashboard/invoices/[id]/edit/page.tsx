@@ -2,6 +2,24 @@ import Form from "@/app/ui/invoices/edit-form";
 import Breadcrumbs from "@/app/ui/invoices/breadcrumbs";
 import { fetchCustomers, fetchInvoiceById } from "@/app/lib/data";
 import { notFound } from "next/navigation";
+import { Metadata, ResolvingMetadata } from "next";
+
+type TProps = {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata(
+  { params, searchParams }: TProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const id = params.id;
+  const invoice = await fetchInvoiceById(id);
+
+  return {
+    title: invoice.customer_id,
+  };
+}
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
